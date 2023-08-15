@@ -2,10 +2,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from yaml import load, CLoader
-from bs4 import BeautifulSoup
-from requests import get
-import lxml
-import time
+# from bs4 import BeautifulSoup
+# from requests import get
+# import lxml
+import datetime
 
 conf = load(open('login_details.yml'), CLoader)
 
@@ -48,9 +48,12 @@ def login(
     token_standin = False
     while token_standin is False:
         try:
-            # input_tag = source_soup.find('main').find('form').find('h1').string
-            list = driver.find_element(By.TAG_NAME, 'main')
-            span = list.find_element(By.TAG_NAME, "span")
+            # input_tag = source_soup.find('main')
+            # .find('form')
+            # .find('h1')
+            # .string
+            main = driver.find_element(By.TAG_NAME, 'main')
+            span = main.find_element(By.TAG_NAME, "span")
             if len(span.text) > 4:
                 print("***waiting for token***")
                 driver.refresh()
@@ -63,7 +66,7 @@ def login(
 
     driver.find_element(by='id', value='form-token').send_keys(token_standin)
     driver.find_element(by='id', value='form-token').submit()
-    time.sleep(15)
+    print("Token entered at ", datetime.datetime.now())
     driver.quit()
 
 
